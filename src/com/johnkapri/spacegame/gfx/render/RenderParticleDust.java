@@ -1,6 +1,8 @@
 package com.johnkapri.spacegame.gfx.render;
 
+import java.awt.Graphics2D;
 import java.awt.Polygon;
+import java.awt.Shape;
 import java.util.Random;
 
 public class RenderParticleDust extends Render{
@@ -17,5 +19,20 @@ public class RenderParticleDust extends Render{
 			p.addPoint(3 + rand.nextInt(5), 3 + rand.nextInt(5));
 			shapes.add(p);
 		}
+	}
+		
+	@Override
+	public void render(Graphics2D g2d, int x, int y, float pitch, float tilt, int ticks) {
+		g2d.translate(x, y);
+		g2d.rotate(tilt);
+		g2d.scale(0.4, 0.4);
+		
+		for(Shape s : RenderPresets.getStarShapes()) {
+			g2d.draw(s);
+		}
+		
+		g2d.scale(1/0.4, 1/0.4);
+		g2d.rotate(-tilt);
+		g2d.translate(-x, -y);
 	}
 }

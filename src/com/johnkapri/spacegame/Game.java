@@ -7,9 +7,9 @@ import java.awt.image.BufferStrategy;
 
 import javax.swing.JFrame;
 
-import com.johnkapri.spacegame.entity.EntityPlayer;
-import com.johnkapri.spacegame.entity.EntityStart;
 import com.johnkapri.spacegame.gfx.PlayField;
+import com.johnkapri.spacegame.gfx.Screen;
+import com.johnkapri.spacegame.gfx.StartLogo;
 
 @SuppressWarnings("serial")
 public class Game extends Canvas implements Runnable {
@@ -22,23 +22,25 @@ public class Game extends Canvas implements Runnable {
 	public Thread main;
 	public JFrame frame = new JFrame(NAME);
 	public InputHandler input = new InputHandler();
+	public Screen s;
 	public PlayField p;
 	private boolean running = false;
 
 	public Game() {
-//		setMinimumSize(Game.DIMENSIONS);
-//		setMaximumSize(Game.DIMENSIONS);
-//		setPreferredSize(Game.DIMENSIONS);
+		// setMinimumSize(Game.DIMENSIONS);
+		// setMaximumSize(Game.DIMENSIONS);
+		// setPreferredSize(Game.DIMENSIONS);
 		requestFocus();
 		addFocusListener(input);
 		addKeyListener(input);
 	}
-	
+
 	@Override
 	public void run() {
-		p = new PlayField();
-		p.addEntitiy(new EntityPlayer(input, 30, Game.HEIGHT - 50));
-		p.addEntitiy(new EntityStart(WIDTH / 2, HEIGHT / 2));
+		s = new StartLogo(this);
+
+		p = new PlayField(input);
+		p.reset();
 		long lastTick = System.nanoTime();
 		double nsPerTick = 1000000000D / 40D;
 
@@ -47,7 +49,7 @@ public class Game extends Canvas implements Runnable {
 
 		int ticksPS = 0;
 		int framesPS = 0;
-		
+
 		long lastTimer = System.currentTimeMillis();
 		double deltaTick = 0;
 		double deltaFrame = 0;
@@ -62,11 +64,11 @@ public class Game extends Canvas implements Runnable {
 
 			while (deltaTick >= 1) {
 				ticksPS++;
-				p.tick();
+				s.tick();
 				deltaTick -= 1;
 				render();
 			}
-			
+
 			while (deltaFrame >= 1) {
 				framesPS++;
 				deltaFrame -= 1;
@@ -82,7 +84,7 @@ public class Game extends Canvas implements Runnable {
 				framesPS = 0;
 				ticksPS = 0;
 			}
-			
+
 			try {
 				Thread.sleep(10L);
 			} catch (InterruptedException e) {
@@ -90,7 +92,7 @@ public class Game extends Canvas implements Runnable {
 			}
 		}
 	}
-	
+
 	public void render() {
 		BufferStrategy bs = getBufferStrategy();
 		if (bs == null) {
@@ -98,13 +100,18 @@ public class Game extends Canvas implements Runnable {
 			return;
 		}
 		Graphics g = bs.getDrawGraphics();
-		
-		if(p != null) {
-			p.render(g);
+
+		if (s != null) {
+			s.render(g);
 		}
-		
+
 		g.dispose();
 		bs.show();
+	}
+
+	public void displayPlayfield() {
+		s = null;
+		s = p;
 	}
 
 	public void start() {

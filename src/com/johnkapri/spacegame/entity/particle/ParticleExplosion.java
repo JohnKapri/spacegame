@@ -7,8 +7,10 @@ public class ParticleExplosion extends EntityParticle{
 
 	public ParticleExplosion(int x, int y, float xVel, float yVel) {
 		super(x, y);
+		this.yAcc = 4F;
 		this.xVel = xVel;
 		this.yVel = yVel;
+		this.liveTime = 30;
 		this.renderId = Render.renderParticleDust.getRenderId();
 	}
 }

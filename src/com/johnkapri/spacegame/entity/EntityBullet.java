@@ -33,5 +33,16 @@ public class EntityBullet extends Entity{
 		if(x <= 0 || x >= Game.WIDTH || y < -2) {
 			field.destroyEntity(this);
 		}
+		
+		doCollision(field);
+	}
+	
+	private void doCollision(PlayField p) {
+		for(Entity e : p.getCollisionListFor(this)) {
+			if(e != null && e instanceof EntityObstacle) {
+				p.destroyEntity(e);
+				p.destroyEntity(this);
+			}
+		}
 	}
 }

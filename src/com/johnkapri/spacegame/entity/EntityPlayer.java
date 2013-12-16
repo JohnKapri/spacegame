@@ -33,18 +33,29 @@ public class EntityPlayer extends Entity {
 		if (input.use) {
 			if ((shootCooldown == 0) && useReleased) {
 				field.addEntitiy(new EntityLaser((int) (x + Math.sin(tilt) * 10), (int) (y - 10 * Math.cos(tilt)), xVel, tilt));
-				shootCooldown = 8;
+				shootCooldown = 4;
 			}
-			useReleased = false;
+			useReleased = true;
 		} else {
 			useReleased = true;
+		}
+		
+		doCollision(field);
+	}
+	
+	private void doCollision(PlayField p) {
+		for(Entity e : p.getCollisionListFor(this)) {
+			if(e != null && e instanceof EntityObstacle) {
+				p.gameOver();
+				p.destroyEntity(this);
+			}
 		}
 	}
 	
 	@Override
 	public void onCollide(Entity e, PlayField p) {
 		if(e instanceof EntityObstacle) {
-			p.endRound();
+			p.gameOver();
 			p.destroyEntity(this);
 		}
 	}

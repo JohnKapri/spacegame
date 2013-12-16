@@ -6,7 +6,7 @@ import com.johnkapri.spacegame.gfx.PlayField;
 
 public class EntityParticle extends Entity{
 
-	private int liveTime = 20;
+	protected int liveTime = 20;
 	protected Random rand = new Random();
 	
 	public EntityParticle(int x, int y) {
