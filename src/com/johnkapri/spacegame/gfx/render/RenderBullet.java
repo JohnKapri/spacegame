@@ -1,11 +1,11 @@
 package com.johnkapri.spacegame.gfx.render;
 
-import java.awt.geom.Line2D;
+import java.awt.geom.Rectangle2D;
 
-public class RenderBullet extends Render{
+public class RenderBullet extends Render {
 
 	public RenderBullet(int id) {
 		super(id);
-		shapes.add(new Line2D.Float(0, -2, 0, +2));
+		shapes.add(new Rectangle2D.Float(-0.5F, -3.0F, 0.5F, +3.0F));
 	}
 }

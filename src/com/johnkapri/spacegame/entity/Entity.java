@@ -10,18 +10,19 @@ import com.johnkapri.spacegame.gfx.render.Render;
 
 public class Entity {
 	
-	public float x;
-	public float y;
-	public float xVel;
-	public float yVel;
-	public float friction = 1.2F;
-	public float xAcc;
-	public float yAcc;
-	public float tilt = 0.0F;
-	public int width;
-	public int ticks;
+	protected float x;
+	protected float y;
+	protected float xVel;
+	protected float yVel;
+	protected float friction = 1.2F;
+	protected float xAcc;
+	protected float yAcc;
+	protected float tilt = 0.0F;
+	protected int width;
+	protected int ticks;
 	protected int renderId = Render.renderDefault.getRenderId();
 	protected Color color;
+	protected boolean solid = true;
 
 	public Entity(int x, int y) {
 		this.x = x;
@@ -51,7 +52,7 @@ public class Entity {
 			tilt = 0;
 		}
 		
-		if(y > Game.HEIGHT + 10) {
+		if(y > Game.HEIGHT + 20) {
 			field.destroyEntity(this);
 		}
 	}
@@ -74,6 +75,26 @@ public class Entity {
 	
 	public Color getColor() {
 		return color;
+	}
+	
+	public float getX() {
+		return x;
+	}
+	
+	public float getY() {
+		return y;
+	}
+	
+	public int getTicks() {
+		return ticks;
+	}
+	
+	public float getTilt() {
+		return tilt;
+	}
+	
+	public boolean isSolid() {
+		return solid;
 	}
 	
 	private Color getRandomColor() {

@@ -26,6 +26,8 @@ public abstract class Render {
 	public static final Render renderObstacleSpecial = new RenderObstacleSpecial(
 			10);
 	public static final Render renderHourGlass = new RenderHourGlass(11);
+	public static final Render renderPowerup = new RenderPowerup(12);
+	public static final Render renderExplosion = new RenderExplosion(13);
 
 	private int id;
 	protected List<Shape> shapes = new ArrayList<Shape>();
@@ -58,9 +60,9 @@ public abstract class Render {
 
 	public static void render(Entity e, Graphics g) {
 		Graphics2D g2d = (Graphics2D) g;
-		g.setColor(e.getColor());
-		renderers[e.getRenderId()].render(g2d, (int) e.x, (int) e.y, 0.0F,
-				e.tilt, e.ticks);
+		g2d.setColor(e.getColor());
+		renderers[e.getRenderId()].render(g2d, (int) e.getX(), (int) e.getY(), 0.0F,
+				e.getTilt(), e.getTicks());
 	}
 
 	public static boolean doEntitiesCollide(Entity e1, Entity e2) {
@@ -80,12 +82,12 @@ public abstract class Render {
 		}
 
 		AffineTransform at1 = new AffineTransform();
-		at1.translate(e1.x, e1.y);
-		at1.rotate(e1.tilt);
+		at1.translate(e1.getX(), e1.getY());
+		at1.rotate(e1.getTilt());
 
 		AffineTransform at2 = new AffineTransform();
-		at2.translate(e2.x, e2.y);
-		at2.rotate(e2.tilt);
+		at2.translate(e2.getX(), e2.getY());
+		at2.rotate(e2.getTilt());
 
 		a1.transform(at1);
 		a2.transform(at2);

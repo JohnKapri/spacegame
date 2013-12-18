@@ -25,13 +25,13 @@ public class RenderParticleDust extends Render{
 	public void render(Graphics2D g2d, int x, int y, float pitch, float tilt, int ticks) {
 		g2d.translate(x, y);
 		g2d.rotate(tilt);
-		g2d.scale(0.4, 0.4);
+		g2d.scale(0.5, 0.5);
 		
 		for(Shape s : RenderPresets.getStarShapes()) {
 			g2d.draw(s);
 		}
 		
-		g2d.scale(1/0.4, 1/0.4);
+		g2d.scale(1/0.5, 1/0.5);
 		g2d.rotate(-tilt);
 		g2d.translate(-x, -y);
 	}

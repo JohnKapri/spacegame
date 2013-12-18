@@ -6,6 +6,6 @@ public class RenderLaser extends Render{
 
 	public RenderLaser(int id) {
 		super(id);
-		shapes.add(new Rectangle2D.Float(-0.5F, -8.0F, 0.5F, +8.0F));
+		shapes.add(new Rectangle2D.Float(-0.5F, -20.0F, 0.5F, +20.0F));
 	}
 }

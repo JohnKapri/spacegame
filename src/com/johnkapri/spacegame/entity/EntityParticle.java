@@ -12,6 +12,7 @@ public class EntityParticle extends Entity{
 	public EntityParticle(int x, int y) {
 		super(x, y);
 		liveTime = 20 + rand.nextInt(10);
+		this.solid = false;
 	}
 	
 	@Override

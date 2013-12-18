@@ -13,7 +13,6 @@ import com.johnkapri.spacegame.InputHandler;
 import com.johnkapri.spacegame.entity.Entity;
 import com.johnkapri.spacegame.entity.EntityObstacle;
 import com.johnkapri.spacegame.entity.EntityObstacleSpecial;
-import com.johnkapri.spacegame.entity.EntityParticle;
 import com.johnkapri.spacegame.entity.EntityPlayer;
 import com.johnkapri.spacegame.entity.EntityStart;
 import com.johnkapri.spacegame.gfx.render.Render;
@@ -28,12 +27,14 @@ public class PlayField implements Screen {
 	Random rand = new Random();
 
 	private InputHandler input;
+	private EntityPlayer player;
 
 	int score = 0;
 	private boolean useReleased = true;
 	boolean running = false;
 	boolean firstRun = true;
 	boolean gameOver = false;
+	int gameOverTimer;
 
 	int ticks;
 	boolean display;
@@ -66,40 +67,39 @@ public class PlayField implements Screen {
 			slomoEffect = 0;
 		}
 
+		player.tick(this);
 		if (slomoCount <= 0) {
 			for (int i = 0; i < entities.size(); i++) {
 				Entity e = entities.get(i);
-				// if (slomoCount <= 0 || (e != null && e instanceof
-				// EntityPlayer)) {
-				e.tick(this);
-				slomoCount = slomoEffect + 1;
-				// }
-				// if (!(e instanceof EntityParticle)) {
-				// for (Entity e1 : getCollisionListFor(e)) {
-				// e.onCollide(e1, this);
-				// }
-				// }
+				if (e != player) {
+					e.tick(this);
+				}
+				slomoCount = slomoEffect;
 			}
 		}
 		slomoCount--;
 
 		if (input.use) {
-			if (gameOver && useReleased) {
+			if (gameOver && useReleased && (gameOverTimer <= 0)) {
 				reset();
 			}
 			useReleased = false;
 		} else {
 			useReleased = true;
 		}
+		
+		if(gameOverTimer > 0) {
+			gameOverTimer--;
+		}
 	}
 
 	@Override
 	public void render(Graphics g) {
-//		if (slomoCount > 0) {
-//			g.setColor(new Color(0.0F, 0.0F, 0.0F, 0.048F));
-//		} else {
+		if (slomoEffect > 0) {
+			g.setColor(new Color(0.0F, 0.0F, 0.0F, 0.051F));
+		} else {
 			g.setColor(defaultBackground);
-//		}
+		}
 		g.fillRect(0, 0, Game.WIDTH, Game.HEIGHT);
 
 		g.setColor(defaultColor);
@@ -207,6 +207,9 @@ public class PlayField implements Screen {
 			return false;
 		}
 		newEntities.add(e);
+		if (e instanceof EntityPlayer) {
+			this.player = (EntityPlayer) e;
+		}
 		return true;
 	}
 
@@ -249,12 +252,13 @@ public class PlayField implements Screen {
 	}
 
 	public void gameOver() {
+		running = false;
 		endRound();
 		gameOver = true;
+		gameOverTimer = 100;
 	}
 
 	public void endRound() {
-		running = false;
 		int j = entities.size() - 1;
 		for (int i = 0; i < j; i++) {
 			int k = j - i;
